@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Sistemas de Teste | Análise Computacional e Comparativa{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="margin-bottom: 2rem;">
+    <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-primary);">
+        Sistemas de Teste para Análise Comparativa de Estabilidade
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 900px;">
+        Modelagem matemática e caracterização analítica dos quatro cenários de teste definidos na Fase 1 do projeto.
+        Cada planta explora propriedades dinâmicas desafiadoras: polos instáveis no semiplano direito, zeros de fase não-mínima
+        e termos transcendentais de atraso puro de transporte em redes.
+    </p>
+</div>
+
+<!-- Grid dos 4 Sistemas de Teste -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- Sistema A -->
+    <div class="panel-card" style="border-top: 4px solid var(--primary);">
+        <div style="margin-bottom: 0.75rem;">
+            <span class="badge-tech" style="font-size: 0.7rem;">SISTEMA A</span>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.35rem;">Padrão (3ª Ordem Estável)</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Sistema de terceira ordem estável em malha aberta, com três polos reais no semiplano esquerdo.
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.8); padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;">
+            $$G_A(s) = \frac{K}{(s+1)(s+2)(s+3)}$$
+        </div>
+        <ul style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.2rem; margin-bottom: 1.25rem; line-height: 1.6;">
+            <li><strong>Polos MA:</strong> $s = -1, -2, -3$ ($P = 0$)</li>
+            <li><strong>Zeros MA:</strong> Nenhum ($m = 0$)</li>
+            <li><strong>Faixa de Estabilidade:</strong> $0 < K < 60$ ($K_{crit} = 60$)</li>
+            <li><strong>Comportamento Nyquist:</strong> Não envolve $(-1, 0)$ para $K < 60$ ($N = 0, Z = 0$).</li>
+        </ul>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block" style="font-size: 0.82rem;">Simular no Workbench</a>
+    </div>
+
+    <!-- Sistema B -->
+    <div class="panel-card" style="border-top: 4px solid #ef4444;">
+        <div style="margin-bottom: 0.75rem;">
+            <span class="badge-tech" style="font-size: 0.7rem; border-color: rgba(239, 68, 68, 0.4); color: #f87171;">SISTEMA B</span>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.35rem;">Instável em Malha Aberta</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Representa sistemas inerentemente instáveis, como o pêndulo invertido ou levitador magnético linearizado.
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.8); padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;">
+            $$G_B(s) = \frac{K}{(s-1)(s+2)(s+5)}$$
+        </div>
+        <ul style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.2rem; margin-bottom: 1.25rem; line-height: 1.6;">
+            <li><strong>Polos MA:</strong> $s = +1, -2, -5$ ($P = 1$ polo no RHP!)</li>
+            <li><strong>Critério de Nyquist:</strong> Exige $N = -1$ (envoltório anti-horário) para $Z = 0$.</li>
+            <li><strong>Faixa de Estabilidade:</strong> $10 < K < 28$. Para $K < 10$ ou $K > 28$, o sistema é instável.</li>
+            <li><strong>Dificuldade de Bode:</strong> Não trivial de interpretar diretamente sem Nyquist.</li>
+        </ul>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block" style="font-size: 0.82rem;">Simular no Workbench</a>
+    </div>
+
+    <!-- Sistema C -->
+    <div class="panel-card" style="border-top: 4px solid #f59e0b;">
+        <div style="margin-bottom: 0.75rem;">
+            <span class="badge-tech" style="font-size: 0.7rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">SISTEMA C</span>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.35rem;">Fase Não-Mínima</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Planta contendo zero no semiplano direito. Gera resposta inversa (*undershoot*) e limite estrito no ganho.
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.8); padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;">
+            $$G_C(s) = \frac{K(s-2)}{(s+1)(s+3)(s+5)}$$
+        </div>
+        <ul style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.2rem; margin-bottom: 1.25rem; line-height: 1.6;">
+            <li><strong>Zeros MA:</strong> $s = +2$ (Zero no RHP)</li>
+            <li><strong>Efeito Temporal:</strong> Resposta ao degrau inicia na direção negativa antes de subir.</li>
+            <li><strong>Efeito em Frequência:</strong> Atraso de fase severo sem redução de ganho.</li>
+            <li><strong>Faixa de Estabilidade:</strong> $0 < K < 7.5$.</li>
+        </ul>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block" style="font-size: 0.82rem;">Simular no Workbench</a>
+    </div>
+
+    <!-- Sistema D -->
+    <div class="panel-card" style="border-top: 4px solid #a855f7;">
+        <div style="margin-bottom: 0.75rem;">
+            <span class="badge-tech" style="font-size: 0.7rem; border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">SISTEMA D</span>
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.35rem;">Atraso de Transporte</h3>
+        </div>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Modela sistemas controlados por redes de dados (NCS) ou processos térmicos e químicos com tempo morto $\tau$.
+        </p>
+        <div style="background: rgba(15, 23, 42, 0.8); padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;">
+            $$G_D(s) = \frac{K e^{-\tau s}}{(s+1)(s+2)}, \quad \tau = 0.5\text{ s}$$
+        </div>
+        <ul style="font-size: 0.83rem; color: var(--text-secondary); padding-left: 1.2rem; margin-bottom: 1.25rem; line-height: 1.6;">
+            <li><strong>Termo Transcendental:</strong> $e^{-\tau s}$ introduz defasagem linear $-\omega \tau$ radianos.</li>
+            <li><strong>Tratamento Nyquist:</strong> Exato em frequência; diagrama espirala em direção à origem.</li>
+            <li><strong>Tratamento Algébrico:</strong> Impossível diretamente; exige aproximação racional de Padé.</li>
+            <li><strong>Degradação da Margem:</strong> Limite crítico de ganho e latência reduzidos drasticamente.</li>
+        </ul>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-block" style="font-size: 0.82rem;">Simular no Workbench</a>
+    </div>
+</div>
+
+<!-- Tabela Comparativa dos Métodos -->
+<div class="panel-card">
+    <div class="panel-header">
+        <span class="panel-title">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            Tabela Comparativa Consolidada dos Critérios de Análise
+        </span>
+        <span class="badge-tech">Seção 4 da Especificação</span>
+    </div>
+
+    <div class="routh-table-wrapper">
+        <table class="routh-table" style="text-align: left;">
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Característica</th>
+                    <th style="width: 22%;">Critério de Nyquist</th>
+                    <th style="width: 20%;">Routh-Hurwitz</th>
+                    <th style="width: 20%;">Lugar das Raízes</th>
+                    <th style="width: 20%;">Diagrama de Bode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-power">Domínio de Análise</td>
+                    <td>Frequência (Plano Complexo Polar)</td>
+                    <td>Domínio $s$ (Algébrico / Polinomial)</td>
+                    <td>Domínio $s$ (Geométrico)</td>
+                    <td>Frequência (Magnitude e Fase)</td>
+                </tr>
+                <tr>
+                    <td class="col-power">Estabilidade Relativa</td>
+                    <td><strong>Sim</strong> (Margens de Ganho e Fase)</td>
+                    <td>Não (Apenas estabilidade absoluta)</td>
+                    <td><strong>Sim</strong> (Amortecimento e freq. natural)</td>
+                    <td><strong>Sim</strong> (Margens de Ganho e Fase)</td>
+                </tr>
+                <tr>
+                    <td class="col-power">Sistemas com Atraso ($e^{-\tau s}$)</td>
+                    <td><span style="color: var(--success); font-weight: 700;">Trata de forma exata</span></td>
+                    <td>Não trata diretamente (exige Padé)</td>
+                    <td>Não trata diretamente (exige Padé)</td>
+                    <td><span style="color: var(--success); font-weight: 700;">Trata de forma exata</span></td>
+                </tr>
+                <tr>
+                    <td class="col-power">Instável em Malha Aberta</td>
+                    <td>Lida naturalmente ($P > 0, N = -P$)</td>
+                    <td>Lida naturalmente</td>
+                    <td>Lida naturalmente</td>
+                    <td>Interpretação direta complexa</td>
+                </tr>
+                <tr>
+                    <td class="col-power">Custo Computacional</td>
+                    <td>Moderado (varredura $O(M \cdot n)$)</td>
+                    <td>Baixo (operações polinomiais $O(n^2)$)</td>
+                    <td>Alto (cálculo iterativo de raízes $O(K \cdot n^3)$)</td>
+                    <td>Moderado (varredura logarítmica)</td>
+                </tr>
+                <tr>
+                    <td class="col-power">Principal Vantagem</td>
+                    <td><strong>Ideal para atrasos e dados experimentais</strong></td>
+                    <td>Rapidez analítica para estabilidade absoluta</td>
+                    <td>Visualização contínua do efeito de ganho $K$</td>
+                    <td>Facilidade para síntese de compensadores em frequência</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

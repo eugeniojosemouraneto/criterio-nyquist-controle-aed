@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Interativo | Análise de Estabilidade em Sistemas Dinâmicos{% endblock %}
+
+{% block content %}
+<div class="workbench-layout">
+    <!-- Painel Lateral de Controle e Parâmetros -->
+    <aside class="control-sidebar">
+        <!-- Card de Benchmarks Pré-configurados -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <span class="panel-title">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    Sistemas de Teste
+                </span>
+            </div>
+            <div class="preset-buttons">
+                <button type="button" class="btn-preset active" data-benchmark="sistema_a">
+                    <strong>Sistema A</strong><br><small>3ª Ordem Padrão</small>
+                </button>
+                <button type="button" class="btn-preset" data-benchmark="sistema_b">
+                    <strong>Sistema B</strong><br><small>Instável (P = 1)</small>
+                </button>
+                <button type="button" class="btn-preset" data-benchmark="sistema_c">
+                    <strong>Sistema C</strong><br><small>Fase Não-Mínima</small>
+                </button>
+                <button type="button" class="btn-preset" data-benchmark="sistema_d">
+                    <strong>Sistema D</strong><br><small>Atraso de Transporte</small>
+                </button>
+            </div>
+        </div>
+
+        <!-- Card de Configuração da Função de Transferência -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <span class="panel-title">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Parâmetros da Planta $G(s)$
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="input-num">Numerador $N(s)$ (coeficientes decrescentes):</label>
+                <input type="text" id="input-num" class="form-input" value="1.0" placeholder="Ex: 1 ou 1, 2">
+                <small class="text-muted">Ex: <code>1</code> ou <code>1, -2</code> para $s - 2$</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="input-den">Denominador $D(s)$ (coeficientes decrescentes):</label>
+                <input type="text" id="input-den" class="form-input" value="1.0, 6.0, 11.0, 6.0" placeholder="Ex: 1, 6, 11, 6">
+                <small class="text-muted">Ex: <code>1, 6, 11, 6</code> para $s^3 + 6s^2 + 11s + 6$</small>
+            </div>
+
+            <!-- Ganho K -->
+            <div class="form-group">
+                <label class="form-label" for="slider-gain">Ganho Proporcional $K$:</label>
+                <div class="slider-group">
+                    <input type="range" id="slider-gain" class="slider-input" min="0.1" max="100.0" step="0.5" value="20.0">
+                    <input type="number" id="input-gain" class="form-input slider-value" min="0.01" max="500.0" step="0.5" value="20.0">
+                </div>
+            </div>
+
+            <!-- Atraso de Transporte tau -->
+            <div class="form-group">
+                <label class="form-label" for="slider-delay">Atraso Puro de Tempo $\tau$ (segundos):</label>
+                <div class="slider-group">
+                    <input type="range" id="slider-delay" class="slider-input" min="0.0" max="3.0" step="0.05" value="0.0">
+                    <input type="number" id="input-delay" class="form-input slider-value" min="0.0" max="10.0" step="0.05" value="0.0">
+                </div>
+                <small class="text-muted">Fator $e^{-\tau s}$ tratado de forma exata em frequência.</small>
+            </div>
+
+            <button type="button" id="btn-analyze" class="btn btn-primary btn-block">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Recalcular Estabilidade
+            </button>
+        </div>
+    </aside>
+
+    <!-- Área Principal de Visualização e Métricas -->
+    <section class="main-display">
+        <!-- Banner de Estabilidade Geral -->
+        <div id="status-banner" class="status-banner stable">
+            <div id="status-icon-box" class="status-badge-icon">
+                <svg id="status-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div>
+                <div id="status-title" class="status-title">Sistema Estável</div>
+                <div id="status-desc" class="status-desc">Calculando resposta...</div>
+            </div>
+        </div>
+
+        <!-- Equação Característica Discreta -->
+        <div class="char-poly-discrete">
+            <span class="char-poly-label">Equação Característica de Malha Fechada:</span>
+            <span id="char-poly-display">q(s) = 0</span>
+        </div>
+
+        <!-- Grid de Métricas Chave -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Margem de Ganho (MG)</div>
+                <div id="metric-mg" class="metric-value">--</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Margem de Fase (MF)</div>
+                <div id="metric-mf" class="metric-value">--</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tempo de Subida ($t_r$)</div>
+                <div id="metric-tr" class="metric-value">--</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Sobressinal (%OS)</div>
+                <div id="metric-os" class="metric-value">--</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tempo Acomodação ($t_s$)</div>
+                <div id="metric-ts" class="metric-value">--</div>
+            </div>
+        </div>
+
+        <!-- Abas de Visualização Gráfica -->
+        <div class="panel-card">
+            <div class="tabs-header">
+                <button type="button" class="tab-btn active" data-tab="nyquist">Diagrama de Nyquist</button>
+                <button type="button" class="tab-btn" data-tab="routh">Tabela de Routh-Hurwitz</button>
+                <button type="button" class="tab-btn" data-tab="rootlocus">Lugar das Raízes (Root Locus)</button>
+                <button type="button" class="tab-btn" data-tab="bode">Diagrama de Bode</button>
+                <button type="button" class="tab-btn" data-tab="step">Resposta ao Degrau Temporal</button>
+                <button type="button" class="tab-btn" data-tab="crossval">Validação Cruzada (python-control)</button>
+            </div>
+
+            <!-- Aba 1: Nyquist -->
+            <div id="tab-nyquist" class="tab-content active">
+                <div class="chart-header">
+                    <span class="chart-title">Mapeamento Conforme $G(j\omega)H(j\omega)$ no Plano Polar Complexo</span>
+                    <span class="badge-tech">Princípio do Argumento de Cauchy</span>
+                </div>
+                <div class="chart-container" style="min-height: 480px;">
+                    <canvas id="canvas-nyquist"></canvas>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.75rem;">
+                    <strong>Princípio de Estabilidade:</strong> O Critério de Nyquist determina estabilidade através da relação $Z = N + P$, onde $P$ é o número de polos de malha aberta no semiplano direito (RHP), $N$ é o número de envoltórios horários no ponto crítico $(-1 + j0)$, e $Z$ é o número de polos instáveis em malha fechada. Para estabilidade, é estritamente necessário que $Z = 0 \iff N = -P$.
+                </p>
+            </div>
+
+            <!-- Aba 2: Routh-Hurwitz -->
+            <div id="tab-routh" class="tab-content">
+                <div class="chart-header">
+                    <span class="chart-title">Construção Algébrica da Tabela de Routh</span>
+                    <span class="badge-tech">Álgebra Polinomial em $s$</span>
+                </div>
+                
+                <div id="routh-special-case" class="special-case-box" style="display: none;"></div>
+
+                <div class="routh-table-wrapper">
+                    <table class="routh-table">
+                        <thead>
+                            <tr>
+                                <th>Potência</th>
+                                <th>Coluna 1 (Pivô)</th>
+                                <th>Coluna 2</th>
+                                <th>Coluna 3</th>
+                                <th>Coluna 4</th>
+                            </tr>
+                        </thead>
+                        <tbody id="routh-table-body">
+                            <!-- Preenchido dinamicamente via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="routh-verdict" style="margin-top: 1rem; font-size: 0.9rem; padding: 0.85rem; background: rgba(15, 23, 42, 0.7); border-radius: var(--radius-sm); border-left: 3px solid var(--primary);"></div>
+            </div>
+
+            <!-- Aba 3: Root Locus -->
+            <div id="tab-rootlocus" class="tab-content">
+                <div class="chart-header">
+                    <span class="chart-title">Traçado Geométrico das Raízes no Plano $s$ para $K \ge 0$</span>
+                    <span class="badge-tech">Evans / Ogata (2010)</span>
+                </div>
+                <div class="chart-container" style="min-height: 480px;">
+                    <canvas id="canvas-rootlocus"></canvas>
+                </div>
+                <div id="rl-summary" style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary); background: rgba(15, 23, 42, 0.6); padding: 0.75rem 1rem; border-radius: var(--radius-sm);"></div>
+            </div>
+
+            <!-- Aba 4: Bode -->
+            <div id="tab-bode" class="tab-content">
+                <div class="chart-header">
+                    <span class="chart-title">Resposta em Frequência (Magnitude e Fase Logarítmica)</span>
+                    <span class="badge-tech">Bode / Nise (2017)</span>
+                </div>
+                <div class="chart-container" style="min-height: 250px; margin-bottom: 1rem;">
+                    <canvas id="canvas-bode-mag"></canvas>
+                </div>
+                <div class="chart-container" style="min-height: 250px;">
+                    <canvas id="canvas-bode-phase"></canvas>
+                </div>
+            </div>
+
+            <!-- Aba 5: Resposta ao Degrau -->
+            <div id="tab-step" class="tab-content">
+                <div class="chart-header">
+                    <span class="chart-title">Simulação da Resposta Temporal ao Degrau Unitário $y(t)$</span>
+                    <span class="badge-tech">Integração Numérica RK4</span>
+                </div>
+                <div class="chart-container" style="min-height: 450px;">
+                    <canvas id="canvas-step"></canvas>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.75rem;">
+                    <strong>Comparativo de Atraso:</strong> Quando o atraso puro $\tau > 0$, o gráfico plota simultaneamente a resposta exata obtida via integração por atraso contínuo e as aproximações de Padé de ordens [1/1] e [2/2], permitindo visualizar diretamente o desvio de precisão temporal.
+                </p>
+            </div>
+
+            <!-- Aba 6: Validação Cruzada (Fase 3 do Projeto) -->
+            <div id="tab-crossval" class="tab-content">
+                <div class="chart-header">
+                    <span class="chart-title">Validação Cruzada: Confronto com Biblioteca Consolidada (python-control & SciPy)</span>
+                    <span class="badge-tech" style="border-color: rgba(52, 211, 153, 0.4); color: #34d399;">Fase 3: Validação & Benchmarking</span>
+                </div>
+                
+                <div id="crossval-banner" class="status-banner stable" style="margin-bottom: 1rem;">
+                    <div class="status-badge-icon">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <div id="crossval-title" class="status-title">Confronto Realizado com Sucesso</div>
+                        <div id="crossval-desc" class="status-desc">Os resultados gerados pelo código próprio coincidem rigorosamente com as rotinas industriais da python-control.</div>
+                    </div>
+                </div>
+
+                <div class="routh-table-wrapper">
+                    <table class="routh-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Parâmetro de Controle</th>
+                                <th>Código Próprio (Do Zero)</th>
+                                <th>python-control (Referência)</th>
+                                <th>Discrepância Absoluta</th>
+                                <th>Conformidade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="crossval-table-body">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 1rem; line-height: 1.6;">
+                    <strong>Metodologia da Fase 3:</strong> Enquanto o núcleo computacional (Fase 2) foi implementado integralmente do zero em Python + NumPy (garantindo independência de bibliotecas prontas), a Fase 3 confronta sistematicamente os resultados contra <code>control.margin</code>, <code>control.poles</code> e <code>control.step_response</code>, atestando que os algoritmos de Nyquist, Routh e Bode atingem a mesma precisão matemática dos pacotes industriais.
+                </p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

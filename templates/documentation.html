@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}Documentação do Código e Reprodutibilidade | Controle Dinâmico{% endblock %}
+
+{% block content %}
+<div class="panel-card" style="margin-bottom: 2rem;">
+    <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--text-primary);">
+        Documentação do Código e Guia de Reprodutibilidade
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 900px;">
+        Arquitetura computacional, formulação algorítmica detalhada, documentação de rotas e APIs RESTful,
+        suíte de testes automatizados e procedimentos passo a passo para reprodutibilidade total do ambiente.
+    </p>
+</div>
+
+<div class="workbench-layout" style="grid-template-columns: 280px 1fr;">
+    <!-- Menu Lateral de Navegação Interna -->
+    <aside>
+        <div class="panel-card" style="position: sticky; top: 85px;">
+            <div class="panel-header">
+                <span class="panel-title" style="font-size: 0.9rem;">Índice da Documentação</span>
+            </div>
+            <nav style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <a href="#arquitetura" class="doc-index-link">1. Arquitetura do Software</a>
+                <a href="#modulos" class="doc-index-link">2. Módulos do Núcleo Matemático</a>
+                <a href="#api" class="doc-index-link">3. Especificação das APIs REST</a>
+                <a href="#testes" class="doc-index-link">4. Suíte de Testes Unitários</a>
+                <a href="#reprodutibilidade" class="doc-index-link">5. Guia de Reprodutibilidade</a>
+                <a href="#bibliografia" class="doc-index-link">6. Bibliografia do Projeto</a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Conteúdo da Documentação -->
+    <section>
+        <!-- 1. Arquitetura -->
+        <div id="arquitetura" class="panel-card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
+                1. Arquitetura do Software e Princípios de Projeto
+            </h2>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                O projeto foi desenhado sob o princípio de <strong>transparência algorítmica total</strong>: nenhum pacote fechado de teoria de controle (como <code>python-control</code>, <code>scipy.signal</code> ou toolboxes comerciais) foi utilizado para realizar cálculos de estabilidade, resposta temporal ou diagramas de frequência.
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.8); padding: 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                Controle_AED/<br>
+                ├── core/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Núcleo computacional matemático puro (Python + NumPy)<br>
+                │ &nbsp; ├── polynomial.py &nbsp;&nbsp;&nbsp;&nbsp;# Álgebra de polinômios, Horner e autovalores<br>
+                │ &nbsp; ├── routh_hurwitz.py &nbsp;# Tabela de Routh com epsilon e linha de zeros<br>
+                │ &nbsp; ├── nyquist.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Contorno D, winding number de Cauchy e margens<br>
+                │ &nbsp; ├── root_locus.py &nbsp;&nbsp;&nbsp;&nbsp;# Lugar das Raízes, assíntotas e breakaway<br>
+                │ &nbsp; ├── bode.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Diagramas de magnitude e fase com atraso exato<br>
+                │ &nbsp; ├── pade.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Aproximações racionais [N/N] de Padé<br>
+                │ &nbsp; ├── simulation.py &nbsp;&nbsp;&nbsp;&nbsp;# Espaço de estados e integrador RK4 com delay buffer<br>
+                │ &nbsp; ├── benchmarks.py &nbsp;&nbsp;&nbsp;&nbsp;# Modelos analíticos dos Sistemas A, B, C e D<br>
+                │ &nbsp; ├── scalability.py &nbsp;&nbsp;&nbsp;# Testes de ordem n = 5, 10, 20 e erros de Wilkinson<br>
+                │ &nbsp; └── cross_validation.py &nbsp;# Validação cruzada com python-control e SciPy (Fase 3)<br>
+                ├── templates/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Páginas HTML da interface gráfica (Jinja2)<br>
+                ├── static/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Folhas de estilo CSS e lógica JavaScript (Chart.js)<br>
+                ├── tests/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Suíte abrangente de 27 testes unitários automatizados<br>
+                ├── app.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Servidor web Flask e rotas da aplicação<br>
+                ├── requirements.txt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Dependências formais do ecossistema<br>
+                └── README.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Instruções completas de execução e documentação
+            </div>
+        </div>
+
+        <!-- 2. Módulos do Núcleo Matemático -->
+        <div id="modulos" class="panel-card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
+                2. Módulos do Núcleo Computacional
+            </h2>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    <code>core/polynomial.py</code> — Manipulação de Polinômios e Raízes
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                    Implementa a classe <code>Polynomial</code> com avaliação numérica estável via algoritmo de Horner ($O(n)$ operações), diferenciação analítica, convolução para multiplicação, e extração de raízes através da matriz companheira de Frobenius de dimensão $(n \times n)$, cujos autovalores correspondem rigorosamente às raízes do polinômio mônico normalizado (OGATA, 2010).
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    <code>core/routh_hurwitz.py</code> — Critério de Routh-Hurwitz e Singularidades
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                    Monta a Tabela de Routh para o polinômio característico de malha fechada $q(s) = 0$. Trata automaticamente os dois casos especiais clássicos documentados em Ogata (2010) e Nise (2017):
+                </p>
+                <ul style="font-size: 0.85rem; color: var(--text-secondary); padding-left: 1.2rem; line-height: 1.6; margin-top: 0.4rem;">
+                    <li><strong>Primeira coluna nula:</strong> Introduz perturbação infinitesimal $\epsilon = 10^{-8}$ e preserva a continuidade dos determinantes.</li>
+                    <li><strong>Linha inteira nula:</strong> Detecta raízes simétricas (como eixos puramente imaginários $\pm j\omega$), forma o polinômio auxiliar $A(s)$ da linha imediatamente anterior e substitui a linha nula pelos coeficientes da derivada analítica $dA(s)/ds$.</li>
+                    <li><strong>Contagem de mudanças de sinal:</strong> Quantifica exatamente os polos no semiplano direito ($P_{rhp}$).</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    <code>core/nyquist.py</code> — Mapeamento Conforme e Winding Number
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                    Avalia a resposta em frequência polar $G(j\omega)H(j\omega)$. Constrói o Contorno de Nyquist completo $\Gamma_s$ com indentação infinitesimal de raio $\epsilon$ para contornar eventuais polos na origem ($s = 0$). Aplica o Princípio do Argumento de Cauchy com cálculo do Winding Number $N$ por meio da integração angular total $\Delta \theta / 2\pi$ e validação cruzada com o teste de interseção de raios geométricos horizontais. Avalia a estabilidade através da relação fundamental $Z = N + P$.
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    <code>core/root_locus.py</code> — Lugar Geométrico das Raízes
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                    Calcula analiticamente o número de assíntotas $n - m$, seus ângulos $\phi_a = (2k+1)180^\circ/(n-m)$, o centroide $\sigma_a = (\sum p - \sum z)/(n-m)$, e os pontos de dispersão (*breakaway*) resolvendo $D'(s)N(s) - D(s)N'(s) = 0$. Rastreia os ramos para uma grade adaptativa de ganhos $K$ com algoritmo de continuidade por vizinho mais próximo.
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    <code>core/simulation.py</code> — Simulação Temporal Runge-Kutta 4
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                    Converte a planta para espaço de estados na forma canônica controlável e realiza a integração numérica RK4 de quarta ordem. Para sistemas com atraso puro de tempo $\tau$, utiliza uma fila circular de buffer contínuo que armazena a saída $y(t - \tau)$ sem necessitar de aproximações polinomiais. Extrai automaticamente o tempo de subida ($t_r$), tempo de pico ($t_p$), sobressinal percentual ($\%OS$) e tempo de acomodação ($t_s$, critério de 2%) segundo Nise (2017).
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    <code>core/cross_validation.py</code> — Validação Cruzada (Fase 3 do Projeto)
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                    Executa o confronto direto entre os cálculos produzidos pelo motor próprio (desenvolvido a partir dos primeiros princípios na Fase 2) e as funções consolidadas da biblioteca <code>python-control</code> (<code>control.margin</code>, <code>control.poles</code> e <code>control.step_response</code>) e <code>scipy.signal</code>. Atesta que as margens de ganho e fase, frequências de cruzamento e valores temporais coincidem com discrepância inferior a $0.05\%$.
+                </p>
+            </div>
+        </div>
+
+        <!-- 3. APIs REST -->
+        <div id="api" class="panel-card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
+                3. Especificação das APIs RESTful
+            </h2>
+
+            <div style="margin-bottom: 1.25rem;">
+                <span class="badge-tech" style="background: rgba(52, 211, 153, 0.15); color: #34d399;">POST</span>
+                <strong style="margin-left: 0.5rem; font-family: var(--font-mono);">/api/analyze</strong>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                    Recebe a definição da planta e retorna todos os dados calculados de Nyquist, Routh, Root Locus, Bode, Resposta Temporal e Padé.
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.78rem; margin-top: 0.4rem;">
+                    // Exemplo de Payload JSON de Entrada<br>
+                    {<br>
+                    &nbsp;&nbsp;"num": [1.0],<br>
+                    &nbsp;&nbsp;"den": [1.0, 6.0, 11.0, 6.0],<br>
+                    &nbsp;&nbsp;"gain": 20.0,<br>
+                    &nbsp;&nbsp;"tau": 0.0<br>
+                    }
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <span class="badge-tech">GET</span>
+                <strong style="margin-left: 0.5rem; font-family: var(--font-mono);">/api/benchmark/&lt;benchmark_id&gt;</strong>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                    Retorna a configuração completa dos benchmarks: <code>sistema_a</code>, <code>sistema_b</code>, <code>sistema_c</code> ou <code>sistema_d</code>.
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <span class="badge-tech" style="background: rgba(52, 211, 153, 0.15); color: #34d399;">POST</span>
+                <strong style="margin-left: 0.5rem; font-family: var(--font-mono);">/api/scalability</strong>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                    Executa a bateria de benchmarks de escalabilidade de tempo e erro de Wilkinson para ordens arbitrárias (ex: <code>{"orders": [3, 5, 10, 20]}</code>).
+                </p>
+            </div>
+        </div>
+
+        <!-- 4. Suíte de Testes Unitários -->
+        <div id="testes" class="panel-card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
+                4. Suíte de Testes Unitários Automatizados
+            </h2>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                O projeto inclui <strong>27 testes unitários automatizados</strong> organizados em 7 arquivos na pasta <code>tests/</code>, garantindo cobertura completa das rotinas matemáticas e das rotas HTTP:
+            </p>
+            <ul style="font-size: 0.85rem; color: var(--text-secondary); padding-left: 1.2rem; line-height: 1.6;">
+                <li><code>tests/test_polynomial.py</code> (6 testes): Avaliação de Horner, derivadas, convolução e extração de raízes.</li>
+                <li><code>tests/test_routh_hurwitz.py</code> (5 testes): Polinômios estáveis, instáveis, Caso Especial 1 ($\epsilon$) e limites de ganho de malha fechada.</li>
+                <li><code>tests/test_nyquist.py</code> (4 testes): Contagem de envoltórios $N$, sistemas estáveis, instáveis em malha aberta ($P = 1, N = -1$) e invariância de magnitude no atraso puro.</li>
+                <li><code>tests/test_root_locus.py</code> (3 testes): Cálculo de assíntotas, centroide $\sigma_a$, ângulos $\phi_a$ e pontos de dispersão.</li>
+                <li><code>tests/test_bode_and_delay.py</code> (5 testes): Margens de Bode, aproximações analíticas de Padé [1/1] e [2/2], e simulação temporal RK4.</li>
+                <li><code>tests/test_benchmarks.py</code> (4 testes): Integridade dos quatro sistemas de benchmark e escalabilidade.</li>
+                <li><code>tests/test_api.py</code> (5 testes): Teste de integração das rotas web e endpoints JSON.</li>
+            </ul>
+        </div>
+
+        <!-- 5. Guia de Reprodutibilidade -->
+        <div id="reprodutibilidade" class="panel-card" style="border: 1px solid var(--primary);">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
+                5. Guia Passo a Passo de Reprodutibilidade
+            </h2>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Siga as etapas abaixo para clonar, instalar dependências, executar os testes e inicializar a aplicação web em qualquer ambiente Windows, Linux ou macOS:
+            </p>
+
+            <div style="margin-bottom: 1rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    Passo 1: Pré-requisitos
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    Certifique-se de possuir o Python 3.10 ou superior instalado no seu sistema.
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; margin-top: 0.3rem;">
+                    python --version
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    Passo 2: Instalação das Dependências
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    Instale os pacotes mínimos requeridos pelo projeto (Flask, NumPy e Pytest):
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; margin-top: 0.3rem;">
+                    pip install -r requirements.txt
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    Passo 3: Execução da Suíte de Testes Unitários
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    Execute todos os testes automatizados para verificar a integridade matemática do núcleo:
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; margin-top: 0.3rem;">
+                    # Via pytest:<br>
+                    pytest<br><br>
+                    # Ou via unittest padrão da biblioteca padrão do Python:<br>
+                    python -m unittest discover tests
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    Passo 4: Inicialização do Servidor da Aplicação
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    Inicie o servidor web local com:
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; margin-top: 0.3rem;">
+                    python app.py
+                </div>
+            </div>
+
+            <div>
+                <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+                    Passo 5: Acesso ao Dashboard Interativo
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                    Abra seu navegador preferido no endereço:
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; margin-top: 0.3rem; color: var(--primary); font-weight: 700;">
+                    http://127.0.0.1:5000
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Bibliografia -->
+        <div id="bibliografia" class="panel-card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">
+                6. Bibliografia Recomendada Utilizada
+            </h2>
+            <ul style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.8; list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 0.75rem;">
+                    <strong>OGATA, Katsuhiko.</strong> <em>Engenharia de Controle Moderno</em>. 5ª ed. São Paulo: Pearson, 2010.
+                </li>
+                <li style="margin-bottom: 0.75rem;">
+                    <strong>NISE, Norman S.</strong> <em>Engenharia de Sistemas de Controle</em>. 7ª ed. Rio de Janeiro: LTC, 2017.
+                </li>
+                <li style="margin-bottom: 0.75rem;">
+                    <strong>ÅSTRÖM, Karl J.; MURRAY, Richard M.</strong> <em>Feedback Systems: An Introduction for Scientists and Engineers</em>. Princeton University Press, 2008.
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
